@@ -3,7 +3,6 @@ import { projectFirestore } from "../firebase/Config";
 import {
   collection,
   query,
-  getDocs,
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
@@ -17,8 +16,9 @@ const useFirestore = (collect) => {
   );
 
   useEffect(() => {
+    let unsub;
     const getTheDocuments = async () => {
-      const unsub = onSnapshot(docRef, (snapshot) => {
+       unsub = onSnapshot(docRef, (snapshot) => {
         let documents = [];
         snapshot.forEach((doc) => {
           documents.push({
@@ -31,7 +31,8 @@ const useFirestore = (collect) => {
     };
 
     getTheDocuments();
-  }, []);
+    return () => unsub();
+  }, [docRef]);
   return { docs };
 };
 
