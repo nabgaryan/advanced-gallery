@@ -8,10 +8,10 @@ const useStorage = (file) => {
   const [error, setError] = useState(null);
   const [url, setUrl] = useState(null);
 
+
   useEffect(() => {
     const storageRef = ref(projectStorage, file.name);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
     uploadTask.on(
       "state_changed",
       (snap) => {
@@ -24,7 +24,6 @@ const useStorage = (file) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           const createdAt = serverTimestamp();
-
           addDoc(collection(projectFirestore, "images"), {
             url: downloadURL,
             createdAt,
